@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Expense Tracker</title>
+    <link rel="stylesheet" th:href="@{/css/style.css}">
+</head>
+<body>
+
+<div class="container">
+    <h1>💰 Expense Tracker</h1>
+
+    <!-- Add Expense Form -->
+    <div class="form-card">
+        <h2>Add New Expense</h2>
+        <form th:action="@{/add}" th:object="${newExpense}" 
+              method="post">
+            <input type="text" th:field="*{title}" 
+                   placeholder="Title" required/>
+            <input type="number" th:field="*{amount}" 
+                   placeholder="Amount (₹)" step="0.01" required/>
+            <select th:field="*{category}">
+                <option value="Food">Food</option>
+                <option value="Travel">Travel</option>
+                <option value="Shopping">Shopping</option>
+                <option value="Health">Health</option>
+                <option value="Education">Education</option>
+                <option value="Other">Other</option>
+            </select>
+            <input type="date" th:field="*{date}" required/>
+            <input type="text" th:field="*{description}" 
+                   placeholder="Description"/>
+            <button type="submit">Add Expense</button>
+        </form>
+    </div>
+
+    <!-- Filter -->
+    <div class="filter-card">
+        <form th:action="@{/filter}" method="get">
+            <select name="category">
+                <option value="Food">Food</option>
+                <option value="Travel">Travel</option>
+                <option value="Shopping">Shopping</option>
+                <option value="Health">Health</option>
+                <option value="Education">Education</option>
+                <option value="Other">Other</option>
+            </select>
+            <button type="submit">Filter</button>
+            <a href="/">Show All</a>
+        </form>
+    </div>
+
+    <!-- Total -->
+    <div class="total-card">
+        <h2>Total Expenses: ₹<span 
+            th:text="${total}">0.00</span></h2>
+    </div>
+
+    <!-- Expense List -->
+    <div class="expense-list">
+        <h2>All Expenses</h2>
+        <table>
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Amount</th>
+                    <th>Category</th>
+                    <th>Date</th>
+                    <th>Description</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr th:each="expense : ${expenses}">
+                    <td th:text="${expense.title}"></td>
+                    <td>₹<span 
+                        th:text="${expense.amount}"></span></td>
+                    <td th:text="${expense.category}"></td>
+                    <td th:text="${expense.date}"></td>
+                    <td th:text="${expense.description}"></td>
+                    <td>
+                        <a th:href="@{/delete/{id}(id=${expense.id})}"
+                           class="delete-btn">Delete</a>
+                    </td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+</div>
+
+</body>
+</html>
